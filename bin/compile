@@ -276,6 +276,8 @@ then
     setGoVersionFromEnvironment
 else
     TOOL="go"
+    name="app"
+    setGoVersionFromEnvironment
 fi
 
 ver=$(expandVer $ver)
@@ -352,9 +354,8 @@ case ${TOOL} in
         p=$GOPATH/src/$name
         mkdir -p $p
         cp -R $build/* $p
-
-        pkgs=$(<$build/Godeps/Godeps.json jq -r 'if .Packages then .Packages | join(" ") else "default" end')
-        handleDefaultPkgSpec
+        
+        pkgs="$name/./..."
         
         unset GIT_DIR # unset git dir or it will mess with goinstall
         cd $p
